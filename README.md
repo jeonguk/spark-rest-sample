@@ -16,11 +16,11 @@ http://localhost:8080/
 ##
 ### TEST using postman
 
-POST    /posts/add - POST request to add an post.
-GET     /posts/:id - GET request to get post by :id. 
-GET     /posts     - GET request to get all the posts.
-PUT     /posts/:id - UPDATE request to update an post by :id.
-DELETE  /posts/:id - DELETE request to delete an post by :id.
+- POST    /posts/add - POST request to add an post.
+- GET     /posts/:id - GET request to get post by :id. 
+- GET     /posts     - GET request to get all the posts.
+- PUT     /posts/:id - UPDATE request to update an post by :id.
+- DELETE  /posts/:id - DELETE request to delete an post by :id.
 
 ```
 POST (application/json)
@@ -31,14 +31,17 @@ http://localhost:8080/posts
 	"categories": ["java", "rest service"]
 }
 ```
+
 ```
 GET ALL POSTS
 http://localhost:8080/posts
 ```
+
 ```
 GET POST
 http://localhost:8080/posts/1
 ```
+
 ```
 PUT
 http://localhost:8080/posts/1
@@ -48,7 +51,9 @@ http://localhost:8080/posts/1
   "categories" : [ "java", "rest service" ]
 }
 ```
+
 ```
 DELETE
 http://localhost:8080/posts/1
 ```
+
