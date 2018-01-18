@@ -5,26 +5,50 @@ spark rest service sample
 
 ##
 ### RUN
-mvn compile && mvn exec:java
+mvn clean install
+java -jar target/spark-rest-service.jar
 
 ##
 ### Visit
-http://localhost:4567/posts
+http://localhost:8080/
+
 
 ##
 ### TEST using postman
-> POST
-```
-http://localhost:4567/posts
 
+POST    /posts/add - POST request to add an post.
+GET     /posts/:id - GET request to get post by :id. 
+GET     /posts     - GET request to get all the posts.
+PUT     /posts/:id - UPDATE request to update an post by :id.
+DELETE  /posts/:id - DELETE request to delete an post by :id.
+
+```
+POST (application/json)
+http://localhost:8080/posts
 {
 	"title": "post title",
 	"content": "post content",
 	"categories": ["java", "rest service"]
 }
 ```
-
-> GET
 ```
-http://localhost:4567/posts
+GET ALL POSTS
+http://localhost:8080/posts
+```
+```
+GET POST
+http://localhost:8080/posts/1
+```
+```
+PUT
+http://localhost:8080/posts/1
+{
+  "title" : "post title edit",
+  "content" : "post content edit",
+  "categories" : [ "java", "rest service" ]
+}
+```
+```
+DELETE
+http://localhost:8080/posts/1
 ```
