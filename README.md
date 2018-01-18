@@ -4,6 +4,15 @@ spark rest service sample
 ---
 
 ##
+###
+- Spark Java 2.7.1
+- Jackson 2.9.3
+- Java 8
+- Maven 3
+- Postman
+
+
+##
 ### RUN
 mvn clean install
 java -jar target/spark-rest-service.jar
