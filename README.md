@@ -9,7 +9,10 @@ spark rest service sample
 - Jackson 2.9.3
 - Java 8
 - Maven 3
+- Mysql
+- Hibernate
 - Postman
+
 
 
 ##
@@ -29,7 +32,6 @@ http://localhost:8080/
 
 - POST    /posts/add - POST request to add an post.
 - GET     /posts/:id - GET request to get post by :id. 
-- GET     /posts     - GET request to get all the posts.
 - PUT     /posts/:id - UPDATE request to update an post by :id.
 - DELETE  /posts/:id - DELETE request to delete an post by :id.
 
