@@ -14,8 +14,10 @@ spark rest service sample
 
 ##
 ### RUN
+```
 mvn clean install
 java -jar target/spark-rest-service.jar
+```
 
 ##
 ### Visit
