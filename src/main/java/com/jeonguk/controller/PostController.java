@@ -1,23 +1,19 @@
 package com.jeonguk.controller;
 
-import static spark.Spark.delete;
-import static spark.Spark.get;
-import static spark.Spark.port;
-import static spark.Spark.post;
-import static spark.Spark.put;
-
-import java.io.IOException;
-import java.io.StringWriter;
-import java.util.Date;
-import java.util.regex.Pattern;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.jeonguk.error.ResponseError;
 import com.jeonguk.model.Post;
 import com.jeonguk.service.impl.PostService;
-
 import lombok.Data;
+
+import java.io.IOException;
+import java.io.StringWriter;
+import java.util.Date;
+import java.util.Optional;
+import java.util.regex.Pattern;
+
+import static spark.Spark.*;
 
 public class PostController extends AbstractController {
 
@@ -52,9 +48,9 @@ public class PostController extends AbstractController {
                 response.status(400);
                 return dataToJson(new ResponseError("Bad Request!"));
             }
-            Post post = postService.findById(Integer.valueOf(request.params(":id")));
-            if (post != null) {
-                return dataToJson(post);
+            final Optional<Post> post = Optional.ofNullable(postService.findById(Integer.valueOf(request.params(":id"))));
+            if(post.isPresent()) {
+                return dataToJson(post.get());
             } else {
                 response.status(404); // 404 Not found
                 return dataToJson("post not found");
@@ -64,19 +60,19 @@ public class PostController extends AbstractController {
         // POST - Add an post
         post("/posts", (request, response) -> {
             ObjectMapper mapper = new ObjectMapper();
-            NewPostPayload creation = mapper.readValue(request.body(), NewPostPayload.class);
+            final NewPostPayload creation = mapper.readValue(request.body(), NewPostPayload.class);
             if (!creation.isValid()) {
                 response.status(HTTP_BAD_REQUEST);
                 return "";
             }
-            Post newPost = new Post();
+            final Post newPost = new Post();
             newPost.setTitle(creation.getTitle());
             newPost.setContent(creation.getContent());
             newPost.setCreatedAt(new Date());
-            Post user = postService.create(newPost);
+            final Post post = postService.create(newPost);
             response.status(201); // 201 Created
             response.type("application/json");
-            return dataToJson(user);
+            return dataToJson(post);
  
         });
         
@@ -87,17 +83,17 @@ public class PostController extends AbstractController {
                 response.status(400);
                 return dataToJson(new ResponseError("Bad Request!"));
             }    
-            Post post = postService.findById(Integer.valueOf(id));
-            if (post != null) {
-                ObjectMapper mapper = new ObjectMapper();
-                NewPostPayload modify = mapper.readValue(request.body(), NewPostPayload.class);
+            final Optional<Post> post = Optional.ofNullable(postService.findById(Integer.valueOf(id)));
+            if (post.isPresent()) {
+                final ObjectMapper mapper = new ObjectMapper();
+                final NewPostPayload modify = mapper.readValue(request.body(), NewPostPayload.class);
                 if (!modify.isValid()) {
                     response.status(HTTP_BAD_REQUEST);
                     return "";
                 }
-                post.setTitle(modify.getTitle());
-                post.setContent(modify.getContent());
-                postService.update(post);
+                post.get().setTitle(modify.getTitle());
+                post.get().setContent(modify.getContent());
+                postService.update(post.get());
                 return dataToJson("post with id " + id + " is updated!");
             } else {
                 response.status(404);
@@ -107,14 +103,14 @@ public class PostController extends AbstractController {
        
         // DELETE - delete post
         delete("/posts/:id", (request, response) -> {
-            String id = request.params(":id");
+            final String id = request.params(":id");
             if (id == null || !Pattern.matches("[0-9]+", id)) {
                 response.status(400);
                 return dataToJson(new ResponseError("Bad Request!"));
             }               
-            Post post = postService.findById(Integer.valueOf(id));
-            if (post != null) {
-                postService.delete(post);
+            final Optional<Post> post = Optional.ofNullable(postService.findById(Integer.valueOf(id)));
+            if (post.isPresent()) {
+                postService.delete(post.get());
                 return dataToJson("post with id " + id + " is deleted!");
             } else {
                 response.status(404);
@@ -129,17 +125,17 @@ public class PostController extends AbstractController {
         private String title;
         private String content;
 
-        public boolean isValid() {
+        boolean isValid() {
             return title != null && !title.isEmpty();
         }
         
     }
     
-    public static String dataToJson(Object data) {
+    private static String dataToJson(Object data) {
         try {
-            ObjectMapper mapper = new ObjectMapper();
+            final ObjectMapper mapper = new ObjectMapper();
             mapper.enable(SerializationFeature.INDENT_OUTPUT);
-            StringWriter sw = new StringWriter();
+            final StringWriter sw = new StringWriter();
             mapper.writeValue(sw, data);
             return sw.toString();
         } catch (IOException e) {

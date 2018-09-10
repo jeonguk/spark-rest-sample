@@ -40,8 +40,7 @@ POST (application/json)
 http://localhost:8080/posts
 {
 	"title": "post title",
-	"content": "post content",
-	"categories": ["java", "rest service"]
+	"content": "post content"
 }
 ```
 
@@ -60,8 +59,7 @@ PUT
 http://localhost:8080/posts/1
 {
   "title" : "post title edit",
-  "content" : "post content edit",
-  "categories" : [ "java", "rest service" ]
+  "content" : "post content edit"
 }
 ```
 
